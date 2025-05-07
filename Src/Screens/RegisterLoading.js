@@ -297,7 +297,11 @@ const RegisterLoading = ({route}) => {
       };
       const apiurl = `http://jbmp.tranzol.com/API/DataPostApi/LoadingEntry?TripDate=${
         date === '' ? '' : moment(date).format('YYYY-MM-DD').toString()
-      }&VehicleId=${vehicleNumber}&Passno=${challanno}&ClentId=${clientName}&SourceId=${source}&DestinationId=${destination}&MaterialId=${materialName}&LoadTypeId=${loadType}&Cashadvance=${cashAdvance}&HSD=${hsd}&PumpId=${pumpName}&PumpId2=${pumpName2}&Other=${expanses}&AddBlue=${adBlue}&Remarks=${remarks}&CreatedBy=${UserId}&MobileApp=1&CreatedOn=${moment(now).format('YYYY-MM-DD').toString()}&HSDQty=${hsdQty}&HSDRate=${hsdRate}&HSDQty2=${hsdQty2}&HSDRate2=${hsdRate2}&NetWeight=${parseInt(netwt)}`;
+      }&VehicleId=${vehicleNumber}&Passno=${challanno}&ClentId=${clientName}&SourceId=${source}&DestinationId=${destination}
+      &MaterialId=${materialName}&LoadTypeId=${loadType}&Cashadvance=${cashAdvance}&HSD=${hsd}&PumpId=${pumpName}
+      &PumpId2=${pumpName2}&Other=${expanses}&AddBlue=${adBlue}&Remarks=${remarks}&CreatedBy=${UserId}
+      &MobileApp=1&CreatedOn=${moment(now).format('YYYY-MM-DD').toString()}&HSDQty=${hsdQty}&HSDRate=${hsdRate}&HSDQty2=${hsdQty2}
+      &HSDRate2=${hsdRate2}&NetWeight=${parseFloat(netwt).toFixed(2)}`;
   
       console.log(apiurl);
       fetch(apiurl, requestOptions)
