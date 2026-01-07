@@ -26,6 +26,7 @@ import {
 import Calander from '../Components/Calander';
 import moment from 'moment';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import TimePickerCustom from '../Components/TimePicker';
 const RegisterLoading = ({route}) => {
   const navigation = useNavigation();
   const [UserId, setUserId] = useState(null);
@@ -97,7 +98,80 @@ const RegisterLoading = ({route}) => {
 
   const [ClientAmount, setClientAmount] = useState('0.00');
   const [BillAmount, setBillAmount] = useState('0.00');
+  const [openTime, setOpenTime] = useState(false);
+const [selectedTime, setSelectedTime] = useState(new Date());
+const [formattedTime, setFormattedTime] = useState('');
 
+const handleTimeConfirm = (time) => {
+  setOpenTime(false);
+  setSelectedTime(time);
+  const formatted = time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  setFormattedTime(formatted);
+};
+
+const formatDate = (inputDate) => {
+  const date = new Date(inputDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // month is 0-indexed
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+const convertTo24Hour = (timeInput) => {
+  if (!timeInput || typeof timeInput !== 'string') {
+    console.log('❌ Invalid or no time provided');
+    return '00:00';
+  }
+
+  // Normalize spacing, separators, and casing
+  let timeStr = timeInput.trim().toLowerCase().replace(/\./g, ':').replace(/\s+/g, ' ');
+
+  // If it doesn't contain am/pm, assume it's already in 24-hour format
+  if (!timeStr.includes('am') && !timeStr.includes('pm')) {
+    const parts = timeStr.split(':');
+    if (parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1])) {
+      const formatted = `${String(parts[0]).padStart(2, '0')}:${String(parts[1]).padStart(2, '0')}`;
+      console.log('⏱ Already in 24-hour format:', formatted);
+      return formatted;
+    } else {
+      console.log('❌ Invalid 24-hour format');
+      return '00:00';
+    }
+  }
+
+  // Extract time and modifier (am/pm)
+  const [time, modifier] = timeStr.split(' ');
+
+  if (!time || !modifier) {
+    console.log('❌ Incomplete time format');
+    return '00:00';
+  }
+
+  let [hours, minutes] = time.split(':');
+
+  if (!minutes) {
+    // Handle "5 PM" or "12 AM"
+    minutes = '00';
+  }
+
+  hours = parseInt(hours, 10);
+  minutes = parseInt(minutes, 10);
+
+  if (isNaN(hours) || isNaN(minutes)) {
+    console.log('❌ Invalid time values');
+    return '00:00';
+  }
+
+  if (modifier === 'pm' && hours !== 12) {
+    hours += 12;
+  }
+  if (modifier === 'am' && hours === 12) {
+    hours = 0;
+  }
+
+  const formatted = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  console.log('✅ Converted to 24-hour format:', formatted);
+  return formatted;
+};
   useEffect(() => {
     const hsdRateNum = parseFloat(hsdRate) || 0;
     const hsdQtyNum = parseFloat(hsdQty) || 0;
@@ -280,6 +354,7 @@ const RegisterLoading = ({route}) => {
 
   const [hasBorder, sethasBorder] = useState(false);
   const [dataIsFine, setdataIsFine] = useState(false);
+const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (challanno === '' || date === '') {
@@ -295,57 +370,67 @@ const RegisterLoading = ({route}) => {
         method: 'POST',
         redirect: 'follow',
       };
-      const apiurl = `http://jbmp.tranzol.com/API/DataPostApi/LoadingEntry?TripDate=${
-        date === '' ? '' : moment(date).format('YYYY-MM-DD').toString()
-      }&VehicleId=${vehicleNumber}&Passno=${challanno}&ClentId=${clientName}&SourceId=${source}&DestinationId=${destination}
+       setIsLoading(true);
+    const formattedTime24 = convertTo24Hour(formattedTime);
+   const tripDateTime =
+  date === ''
+    ? ''
+    : `${moment(date).format('YYYY-MM-DD')} ${formattedTime24}`;
+
+      const apiurl = `http://jbmp.tranzol.com/API/DataPostApi/LoadingEntry?TripDate=${tripDateTime}
+      &VehicleId=${vehicleNumber}&Passno=${challanno}&ClentId=${clientName}&SourceId=${source}&DestinationId=${destination}
       &MaterialId=${materialName}&LoadTypeId=${loadType}&Cashadvance=${cashAdvance}&HSD=${hsd}&PumpId=${pumpName}
       &PumpId2=${pumpName2}&Other=${expanses}&AddBlue=${adBlue}&Remarks=${remarks}&CreatedBy=${UserId}
       &MobileApp=1&CreatedOn=${moment(now).format('YYYY-MM-DD').toString()}&HSDQty=${hsdQty}&HSDRate=${hsdRate}&HSDQty2=${hsdQty2}
       &HSDRate2=${hsdRate2}&NetWeight=${parseFloat(netwt).toFixed(2)}`;
   
-      console.log(apiurl);
-      fetch(apiurl, requestOptions)
-        .then(response => response.text())
-        .then(result => {
-          console.log(result);
-          if (result.includes('Cannot insert duplicate key in object')) {
-            Dialog.show({
-              type: ALERT_TYPE.INFO,
-              title: 'ERROR',
-              textBody: 'Challan Existed',
-              button: 'close',
-            });
-          } else if (result.includes('Challan Added Succesfully')) {
-            Dialog.show({
-              type: ALERT_TYPE.SUCCESS,
-              title: 'Success',
-              textBody: 'Submitted',
-              button: 'close',
-              onHide: () => {
-                navigation.navigate('Loading');
-              },
-            });
-          } else {
-            Dialog.show({
-              type: ALERT_TYPE.INFO,
-              title: 'ERROR',
-              textBody: 'Something Went Wrong',
-              button: 'close',
-            });
-          }
-        })
-        .catch(error => {
-          console.log(error);
-          Dialog.show({
-            type: ALERT_TYPE.DANGER,
-            title: 'ERROR',
-            textBody: error,
-            button: 'close',
-            onHide: () => {
-              navigation.navigate('Dashboard');
-            },
-          });
-        });
+    //  console.log(apiurl);
+    fetch(apiurl, requestOptions)
+  .then(response => response.text())
+  .then(result => {
+    console.log(result);
+    if (result.includes('Cannot insert duplicate key in object')) {
+      Dialog.show({
+        type: ALERT_TYPE.INFO,
+        title: 'ERROR',
+        textBody: 'Challan Existed',
+        button: 'close',
+      });
+    } else if (result.includes('Challan Added Succesfully')) {
+      Dialog.show({
+        type: ALERT_TYPE.SUCCESS,
+        title: 'Success',
+        textBody: 'Submitted',
+        button: 'close',
+        onHide: () => {
+          navigation.navigate('Loading');
+        },
+      });
+    } else {
+      Dialog.show({
+        type: ALERT_TYPE.INFO,
+        title: 'ERROR',
+        textBody: 'Something Went Wrong',
+        button: 'close',
+      });
+    }
+  })
+  .catch(error => {
+    console.log(error);
+    Dialog.show({
+      type: ALERT_TYPE.DANGER,
+      title: 'ERROR',
+      textBody: error?.toString(),
+      button: 'close',
+      onHide: () => {
+        navigation.navigate('Dashboard');
+      },
+    });
+  })
+  .finally(() => {
+    setIsLoading(false);
+  });
+setIsLoading(false);
     } else {
       sethasBorder(true);
       console.log('nonsense');
@@ -413,7 +498,16 @@ const RegisterLoading = ({route}) => {
               }}
               onPress={() => setOpen(true)}
             />
-
+<TimePickerCustom
+  open={openTime}
+  time={selectedTime}
+  onConfirm={handleTimeConfirm}
+  onCancel={() => setOpenTime(false)}
+  onPress={() => setOpenTime(true)}
+  valueTime={formattedTime}
+  labelname="Select Load Time"
+  isMandatory={true}
+/>
             <CustomDropdown
               labelText="Vehicle Number"
               dropData={vehicleNumberData}
@@ -670,8 +764,14 @@ const RegisterLoading = ({route}) => {
             justifyContent: 'space-evenly',
             marginBottom: '3%',
           }}>
-          <TouchableOpacity style={styles.button} onPress={onSubmit}>
+          <TouchableOpacity style={styles.button}
+          disabled={isLoading}
+          onPress={onSubmit}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#2596be" />
+            ) : (
             <Text style={styles.text}>Submit</Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>
