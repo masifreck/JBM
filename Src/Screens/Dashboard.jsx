@@ -135,16 +135,37 @@ const Dashboard = () => {
               }}>
               Hello!
             </Text>
-            <Text
-              style={{
-                fontFamily: 'PoppinsMedium',
-                fontSize: 20,
-                color: 'white',
-                letterSpacing: 2,
-                textTransform: 'uppercase',
-              }}>
-              {userId}
-            </Text>
+
+            <View
+  style={{
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '95%',
+    paddingHorizontal: 10,
+  }}>
+  <Text
+    style={{
+      fontFamily: 'PoppinsMedium',
+      fontSize: 20,
+      color: 'white',
+      letterSpacing: 2,
+      textTransform: 'uppercase',
+    }}>
+    {userId}
+  </Text>
+
+  <Text
+    style={{
+      fontFamily: 'PoppinsMedium',
+      fontSize: 15,
+      color: 'white',
+      letterSpacing: 2,
+      textTransform: 'uppercase',
+    }}>
+    V-1.0.0
+  </Text>
+</View>
           </View>
         </View>
 

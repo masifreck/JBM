@@ -72,7 +72,7 @@ const UpdateLoading = ({route}) => {
 
   useEffect(() => {
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/PumpName?PumpName=${pumpNameSearch}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/PumpName?PumpName=${pumpNameSearch}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -87,7 +87,7 @@ const UpdateLoading = ({route}) => {
   }, [pumpNameSearch]);
   useEffect(() => {
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/PumpName?PumpName=${pumpNameSearch2}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/PumpName?PumpName=${pumpNameSearch2}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -103,7 +103,7 @@ const UpdateLoading = ({route}) => {
 
 const onSubmit = () => {
     // Wrap the challanno value in single quotes
-const apiurl = `http://jbmp.tranzol.com/API/DataPostApi/LoadingUpdate?HSDQty=${hsdQty}&HSDQty2=${hsdQty2}&HSDRate=${hsdRate}&HSDRate2=${hsdRate2}&HSD=${hsd}&PumpId=${pumpName}&PumpId2=${pumpName2}&Passno='${ChallanNo}'`;
+const apiurl = `https://jbmp.tranzol.com/API/DataPostApi/LoadingUpdate?HSDQty=${hsdQty}&HSDQty2=${hsdQty2}&HSDRate=${hsdRate}&HSDRate2=${hsdRate2}&HSD=${hsd}&PumpId=${pumpName}&PumpId2=${pumpName2}&Passno='${ChallanNo}'`;
     
     console.log(apiurl);
     fetch(apiurl, { method: 'POST', redirect: 'follow' })

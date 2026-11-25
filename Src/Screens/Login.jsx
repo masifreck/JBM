@@ -42,7 +42,7 @@ const Login = () => {
     if (UserName.length !== 0 || Password.length !== 0) {
       setIsLoading(true);
       fetch(
-        `http://jbmp.tranzol.com/API/LoginAPI/Authenticate?UserName=${UserName}&Password=${Password}`,
+        `https://jbmp.tranzol.com/API/LoginAPI/Authenticate?UserName=${UserName}&Password=${Password}`,
         {
           method: 'GET',
           redirect: 'follow',

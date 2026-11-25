@@ -193,7 +193,7 @@ const convertTo24Hour = (timeInput) => {
     redirect: 'follow',
   };
   useEffect(() => {
-    const url = `http://jbmp.tranzol.com/API/VendorAPI/Vehicles?VehicleNo=${vehicleNumberSearch}`;
+    const url = `https://jbmp.tranzol.com/API/VendorAPI/Vehicles?VehicleNo=${vehicleNumberSearch}`;
 
     fetch(url, requestOptions)
       .then(response => response.json())
@@ -209,7 +209,7 @@ const convertTo24Hour = (timeInput) => {
   useEffect(() => {
     // Fetching client data
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/Clinet?ClientName=${clientNameSearch}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/Clinet?ClientName=${clientNameSearch}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -225,7 +225,7 @@ const convertTo24Hour = (timeInput) => {
   // Fetching destination data
   useEffect(() => {
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/Destination?Destination=${destinationSearch}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/Destination?Destination=${destinationSearch}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -241,7 +241,7 @@ const convertTo24Hour = (timeInput) => {
   useEffect(() => {
     // Fetching source data
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/Source?Source=${sourceSearch}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/Source?Source=${sourceSearch}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -257,7 +257,7 @@ const convertTo24Hour = (timeInput) => {
   useEffect(() => {
     // Fetching material name data
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/Material?Material=${materialNameSearch}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/Material?Material=${materialNameSearch}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -273,7 +273,7 @@ const convertTo24Hour = (timeInput) => {
   // Fetching pump name data
   useEffect(() => {
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/PumpName?PumpName=${pumpNameSearch}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/PumpName?PumpName=${pumpNameSearch}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -288,7 +288,7 @@ const convertTo24Hour = (timeInput) => {
   }, [pumpNameSearch]);
   useEffect(() => {
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/PumpName?PumpName=${pumpNameSearch2}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/PumpName?PumpName=${pumpNameSearch2}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -304,7 +304,7 @@ const convertTo24Hour = (timeInput) => {
   useEffect(() => {
     // Fetching load type data
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/LoadType?LoadTypeName=${loadTypeSearch}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/LoadType?LoadTypeName=${loadTypeSearch}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -377,7 +377,7 @@ const [isLoading, setIsLoading] = useState(false);
     ? ''
     : `${moment(date).format('YYYY-MM-DD')} ${formattedTime24}`;
 
-      const apiurl = `http://jbmp.tranzol.com/API/DataPostApi/LoadingEntry?TripDate=${tripDateTime}
+      const apiurl = `https://jbmp.tranzol.com/API/DataPostApi/LoadingEntry?TripDate=${tripDateTime}
       &VehicleId=${vehicleNumber}&Passno=${challanno}&ClentId=${clientName}&SourceId=${source}&DestinationId=${destination}
       &MaterialId=${materialName}&LoadTypeId=${loadType}&Cashadvance=${cashAdvance}&HSD=${hsd}&PumpId=${pumpName}
       &PumpId2=${pumpName2}&Other=${expanses}&AddBlue=${adBlue}&Remarks=${remarks}&CreatedBy=${UserId}

@@ -31,7 +31,7 @@ const Loading = () => {
     };
 
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/GetChallanListDetails?Passno=${ChallanNo}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/GetChallanListDetails?Passno=${ChallanNo}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -92,7 +92,7 @@ const Loading = () => {
   
     try {
       const response = await fetch(
-        `http://jbmp.tranzol.com/API/VendorAPI/GetUpdateDetails?Passno=${encodeURIComponent(ChallanNo)}`,
+        `https://jbmp.tranzol.com/API/VendorAPI/GetUpdateDetails?Passno=${encodeURIComponent(ChallanNo)}`,
         requestOptions
       );
       const result = await response.json();

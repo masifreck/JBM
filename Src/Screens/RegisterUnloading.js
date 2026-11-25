@@ -69,7 +69,7 @@ const RegisterUnloading = () => {
     };
 
     fetch(
-      `http://jbmp.tranzol.com/API/VendorAPI/GetChallanDetails?Passno=${challanno}`,
+      `https://jbmp.tranzol.com/API/VendorAPI/GetChallanDetails?Passno=${challanno}`,
       requestOptions,
     )
       .then(response => response.json())
@@ -93,7 +93,7 @@ const RegisterUnloading = () => {
       };
 
       fetch(
-        `http://jbmp.tranzol.com/API/DataPostApi/UnloadingEntry?Passno='${challanno}'&UnloadWeight=${UnLoadWt}&UnloadDate=${
+        `https://jbmp.tranzol.com/API/DataPostApi/UnloadingEntry?Passno='${challanno}'&UnloadWeight=${UnLoadWt}&UnloadDate=${
           date === '' ? '' : moment(date).format('YYYY-MM-DD').toString()
         }`,
         requestOptions,
